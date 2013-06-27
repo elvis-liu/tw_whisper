@@ -8,10 +8,7 @@ import sun.misc.BASE64Encoder;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
@@ -28,6 +25,8 @@ public class WhisperMain {
     public static final String EMAIL_PASSWORD = "xL3Xa240EEbaHJz3iD";
 
     public static void main(String[] args) throws Exception {
+        checkKeyFile();
+
         System.out.print("Hello there, please input your name: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine().trim();
@@ -37,6 +36,14 @@ public class WhisperMain {
             System.out.println("Your pass key is: " + passKey);
             System.out.println(String.format("Please visit %s for next step.", AUTH_SITE));
             sendNotificationMail(name, getMacAddress(), passKey);
+        }
+    }
+
+    private static void checkKeyFile() {
+        String keyFilePath = System.getenv("TW.TRAINING.KEY_FILE");
+        if (StringUtils.isBlank(keyFilePath)) {
+            System.out.println("Please set the environment variable TW.TRAINING.KEY_FILE to point to the key file you downloaded.");
+            System.exit(-1);
         }
     }
 
